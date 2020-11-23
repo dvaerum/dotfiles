@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# ex: set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab:
+
+if command -v vim >/dev/null 2>&1; then
+  if ![ -f "~/.vim/bundle/Vundle.vim" ]; then
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  fi
+
+  echo "Bootstraping Vim"
+  vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
+fi
+
