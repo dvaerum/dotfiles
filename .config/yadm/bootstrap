@@ -1,12 +1,28 @@
 #!/usr/bin/env bash
 # ex: set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab:
 
+set -ue
+
+[ -n "${DEBUG_BASH:-}" ] && set -x
+
+DEBUG="${DEBUG:-}"
+
 if command -v vim >/dev/null 2>&1; then
-  if ![ -f "~/.vim/bundle/Vundle.vim" ]; then
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
+    git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
+    env SHELL=$(which sh) vim +BundleInstall! +BundleClean +qall
   fi
 
   echo "Bootstraping Vim"
   vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
 fi
 
+if command -v vim >/dev/null 2>&1; then
+  if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+    "$HOME/.tmux/plugins/tpm/bin/install_plugins"
+  fi
+
+  echo "Bootstraping tmux"
+  "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
+fi
