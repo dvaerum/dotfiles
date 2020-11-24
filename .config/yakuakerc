@@ -1,0 +1,22 @@
+[Desktop Entry]
+DefaultProfile=default.profile
+
+[Dialogs]
+FirstRun=false
+
+[Favorite Profiles]
+Favorites=
+
+[Notification Messages]
+ShowPasteUnprintableWarning=true
+
+[Shortcuts]
+decrease-window-width=none
+increase-window-width=none
+next-session=Alt+Shift+Right
+previous-session=Alt+Shift+Left
+
+[Window]
+DynamicTabTitles=true
+Height=70
+KeepOpen=false
