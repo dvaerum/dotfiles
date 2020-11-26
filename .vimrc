@@ -98,7 +98,7 @@ inoremap <F3> <c-o>:w<cr>
 let python_highlight_all=1
 
 " Line Numbering
-set nu
+set number
 
 " UTF-8 Support (Enforced)
 set encoding=utf-8
