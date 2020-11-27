@@ -17,7 +17,7 @@ if command -v vim >/dev/null 2>&1; then
   vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
 fi
 
-if command -v vim >/dev/null 2>&1; then
+if command -v tmux >/dev/null 2>&1; then
   if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
     "$HOME/.tmux/plugins/tpm/bin/install_plugins"
