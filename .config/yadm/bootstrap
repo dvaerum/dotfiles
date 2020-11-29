@@ -28,6 +28,10 @@ elif [[ "${ID:-}" =~ ^(manjaro|arch) ]]; then
 fi
 
 
+### Config GIT
+git config --global core.askPass ~/.local/bin/git-ask-pass.sh
+
+
 if command -v vim >/dev/null 2>&1; then
   if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
     git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
@@ -51,3 +55,5 @@ if command -v tmux >/dev/null 2>&1; then
   echo "Bootstraping tmux"
   "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
 fi
+
+
