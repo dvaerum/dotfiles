@@ -7,6 +7,27 @@ set -ue
 
 DEBUG="${DEBUG:-}"
 
+
+system_type="$(uname -s)"
+if [ "${system_type}" == "Linux" ]; then
+  source "/etc/os-release"
+fi
+
+
+if [[ "${ID:-}" == "ubuntu" ]]; then
+  if [ "$(dpkg --list build-essential cmake vim-nox python3-dev \
+          | grep '^ii' | wc -l)" -lt 4 ]; then
+    sudo apt install -y build-essential cmake vim-nox python3-dev
+  fi
+
+elif [[ "${ID:-}" =~ ^(manjaro|arch) ]]; then
+  _packages='cmake gcc make python'
+  if ! pacman -Q ${_packages} > /dev/null; then
+    sudo pacman -Sy --needed --noconfirm ${_packages}
+  fi
+fi
+
+
 if command -v vim >/dev/null 2>&1; then
   if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
     git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
@@ -15,6 +36,10 @@ if command -v vim >/dev/null 2>&1; then
 
   echo "Bootstraping Vim"
   vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
+
+  if [ ! -f "${HOME}/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so" ]; then
+    "${HOME}/.vim/bundle/YouCompleteMe/install.py"
+  fi
 fi
 
 if command -v tmux >/dev/null 2>&1; then
