@@ -39,6 +39,8 @@ Plugin 'preservim/nerdtree'
 " Super Searching (search for basically anything from VIM)
 Plugin 'kien/ctrlp.vim'
 
+" Lean & mean status/tabline for vim that's light as air.
+Plugin 'vim-airline'
 
 " Powerline is a status bar that displays things like the current
 " virtualenv, git branch, files being edited, and much more
