@@ -2,10 +2,65 @@
 # ex: set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab:
 
 set -ue
-
-[ -n "${DEBUG_BASH:-}" ] && set -x
-
+[ -n "${DEBUG_BASH:-}" ] && set -xv
 DEBUG="${DEBUG:-}"
+
+FORCE=""
+SECTION="all"
+
+function check_section {
+  if [ "${SECTION}" == "all" ]; then
+    return 0
+  fi
+
+  if egrep --quiet "^${SECTION}\$" <<<${SECTION}; then
+    return 0
+  fi
+  return 1
+}
+
+function forced {
+  if [ "${FORCE}" != "1" ]; then
+    if check_section "${1,,}"; then
+      return 0
+    else
+      return 1
+    fi
+  else
+    return 1
+  fi
+}
+
+################### Args Parser ###################
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+
+  case $key in
+    -f|--force)
+      FORCE="1"
+      shift # past argument
+    ;;
+
+    -s|--section)
+      SECTION="${2,,}"
+      if ! check_section '(all)'; then
+        >&2 echo "There are no option '${SECTION}' for --section"
+        exit 1
+      fi
+      shift # past argument
+      shift # past value
+    ;;
+
+    *) # unknown option
+      POSITIONAL+=("$1") # save it in an array for later
+      shift # past argument
+    ;;
+  esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+###################################################
 
 
 system_type="$(uname -s)"
@@ -31,14 +86,14 @@ fi
 ### Config GIT
 git config --global core.askPass ~/.local/bin/git-ask-pass.sh
 
-
+### Config VIM
 if command -v vim >/dev/null 2>&1; then
   if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
     git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
-    env SHELL=$(which sh) vim +BundleInstall! +BundleClean +qall
   fi
 
   echo "Bootstraping Vim"
+  env SHELL=$(which sh) vim +BundleInstall! +qall
   vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
 
   if [ ! -f "${HOME}/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so" ]; then
@@ -46,6 +101,7 @@ if command -v vim >/dev/null 2>&1; then
   fi
 fi
 
+### Config TMUX
 if command -v tmux >/dev/null 2>&1; then
   if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
