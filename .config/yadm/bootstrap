@@ -80,6 +80,9 @@ elif [[ "${ID:-}" =~ ^(manjaro|arch) ]]; then
   if ! pacman -Q ${_packages} > /dev/null; then
     sudo pacman -Sy --needed --noconfirm ${_packages}
   fi
+elif [ "$(uname)" == "Darwin" ]; then
+  _packages='cmake python mono go nodejs'
+  brew install ${_packages}
 fi
 
 
