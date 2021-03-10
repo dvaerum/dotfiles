@@ -13,10 +13,11 @@ ShowPasteUnprintableWarning=true
 [Shortcuts]
 decrease-window-width=none
 increase-window-width=none
-next-session=Alt+Shift+Right; Meta+Ctrl+Right
-previous-session=Alt+Shift+Left; Meta+Ctrl+Left
+next-session=Meta+Right;\s
+options_configure=none
+previous-session=Meta+Left;\s
 
 [Window]
 DynamicTabTitles=true
-Height=66
+Height=64
 KeepOpen=false
